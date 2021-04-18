@@ -1,2 +1,4 @@
 # PaintDotNet.ProcessorInformation
- Code extracted from Paint.NET for obtaining information about the CPU from the Win32 GetLogicalProcessorInformation API
+Code extracted from Paint.NET for obtaining information about the CPU from the Win32 GetLogicalProcessorInformation API. Someone needed this over on Discord :) I haven't pruned or even built this code, it's lifted directly from the Paint.NET code base.
+
+Start by looking at `Processor.cs::GetLogicalProcessorInformation()`. There are some handy extension methods in `LogicalProcessorInfoExtensions` for getting the logical and physical core counts. Paint.NET uses this to establish the min/max bounds for worker thread counts. Most of the time, only the physical core count is used -- this helps leave breathing room for the UI thread, and for other in-process threadpools (mostly WARP, DirectX). When running things like effects, the thread count is ramped up to the logical core count, which does help rendering throughput quite a lot.
